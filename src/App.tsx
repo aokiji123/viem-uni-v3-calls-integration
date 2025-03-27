@@ -3,6 +3,7 @@ import "./App.css";
 import { getPoolInfo } from "./viem";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { injected } from "wagmi/connectors";
+import { TokenBalance } from "./components/TokenBalance";
 
 function App() {
   const { address, isConnected } = useAccount();
@@ -49,14 +50,8 @@ function App() {
     return <div className="p-4 text-red-500">Error: {error}</div>;
   }
 
-  if (!poolInfo) {
-    return <div className="p-4">Loading pool info...</div>;
-  }
-
-  console.log(poolInfo);
-
   return (
-    <div className="p-4">
+    <div className="p-4 max-w-2xl mx-auto">
       <div className="flex justify-between flex-col items-center mb-6">
         <h1 className="text-2xl font-bold">Uniswap V3 Pool Info</h1>
         <div className="flex items-center gap-4">
@@ -69,17 +64,29 @@ function App() {
           </button>
         </div>
       </div>
-      <div className="space-y-2">
-        <div>
-          <span className="font-semibold">Current Tick:</span> {poolInfo.tick}
-        </div>
-        <div>
-          <span className="font-semibold">SqrtPriceX96:</span>{" "}
-          {poolInfo.sqrtPriceX96.toString()}
-        </div>
-        <div>
-          <span className="font-semibold">Liquidity:</span>{" "}
-          {poolInfo.liquidity.toString()}
+
+      <div className="grid gap-8">
+        {poolInfo && (
+          <div className="space-y-2 p-4 bg-gray-50 rounded-lg">
+            <h2 className="text-xl font-semibold mb-4">Pool Information</h2>
+            <div>
+              <span className="font-semibold">Current Tick:</span>{" "}
+              {poolInfo.tick}
+            </div>
+            <div>
+              <span className="font-semibold">SqrtPriceX96:</span>{" "}
+              {poolInfo.sqrtPriceX96.toString()}
+            </div>
+            <div>
+              <span className="font-semibold">Liquidity:</span>{" "}
+              {poolInfo.liquidity.toString()}
+            </div>
+          </div>
+        )}
+
+        <div className="p-4 bg-gray-50 rounded-lg">
+          <h2 className="text-xl font-semibold mb-4">Token Operations</h2>
+          <TokenBalance />
         </div>
       </div>
     </div>
